@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
-import { Image, Modal, Input } from "antd";
+import { Image, Modal, Input, message } from "antd";
+import axios from "axios";
 
 const Box = styled.div`
   width: 100%;
@@ -42,8 +43,16 @@ const SendTextArea = styled(Input.TextArea)`
   resize: none;
 `;
 
-const FriendBox = ({ key, name, avatar, status }) => {
+const FriendBox = ({ id, name, avatar, status }) => {
   const [sendModal, setSendModal] = useState(false);
+  const [sendContent, setSendContent] = useState("");
+
+  const contentOnChange = useCallback(
+    (event) => {
+      setSendContent(event.target.value);
+    },
+    [sendContent]
+  );
   //
   const sendOpen = (pk) => {
     setSendModal(true);
@@ -52,6 +61,32 @@ const FriendBox = ({ key, name, avatar, status }) => {
   const sendClose = () => {
     setSendModal(false);
   };
+
+  // DATA Selection
+  // 현재 나의 아이디
+  // 누구한테 보낼지, 메세지를 받을 사람의 아이디
+  // 뭐라고 보낼지
+  //
+
+  const sendMesssgeAction = useCallback(async () => {
+    const callResult = await axios.post(
+      "http://localhost:4000/api/message/sendMessage",
+      {
+        who: localStorage.getItem("ruby_user_id"),
+        whom: id,
+        content: sendContent,
+      }
+    );
+
+    if (callResult.data === "성공") {
+      message.success("메세지가 전송되었습니다.");
+    } else {
+      message.success("메세지 전송에 실패하셨습니다.");
+    }
+
+    sendClose();
+    setSendContent("");
+  }, [sendContent]);
 
   return (
     <Box>
@@ -68,8 +103,14 @@ const FriendBox = ({ key, name, avatar, status }) => {
         title="메세지 보내기"
         visible={sendModal}
         onCancel={() => sendClose()}
+        onOk={sendMesssgeAction}
       >
-        <SendTextArea allowClear={true} rows={10} />
+        <SendTextArea
+          allowClear={true}
+          rows={10}
+          value={sendContent}
+          onChange={contentOnChange}
+        />
       </Modal>
     </Box>
   );

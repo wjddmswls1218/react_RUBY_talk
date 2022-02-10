@@ -28,7 +28,17 @@ const Content = styled.p`
   padding: 5px;
 `;
 
-const MsgBox = ({ isSend }) => {
+const MsgBox = ({
+  id,
+  isSend,
+  content,
+  isRead,
+  createdAt,
+  who,
+  whoName,
+  whom,
+  whomName,
+}) => {
   const [contentModal, setContentModal] = useState(false);
 
   const modalToggle = () => {
@@ -39,8 +49,8 @@ const MsgBox = ({ isSend }) => {
     return (
       <Fade right>
         <Wrapper isSend={isSend} onClick={() => modalToggle()}>
-          <TopMsg isSend={isSend}>보낸메세지</TopMsg>
-          <Content>내용내용내용ㅇ냉뇨얀ㅇ냉뇬</Content>
+          <TopMsg isSend={isSend}>보낸메세지({whomName})</TopMsg>
+          <Content>{content}</Content>
 
           <Modal
             title="쪽지함 내용"
@@ -48,7 +58,7 @@ const MsgBox = ({ isSend }) => {
             footer={null}
             onClick={() => modalToggle()}
           >
-            <p>qmkfnediosfnldkndls</p>
+            <p>{content}</p>
           </Modal>
         </Wrapper>
       </Fade>
@@ -57,8 +67,8 @@ const MsgBox = ({ isSend }) => {
     return (
       <Fade left>
         <Wrapper isSend={isSend} onClick={() => modalToggle()}>
-          <TopMsg isSend={isSend}>받은메세지</TopMsg>
-          <Content>내용내용내용ㅇ냉뇨얀ㅇ냉뇬</Content>
+          <TopMsg isSend={isSend}>받은메세지({whoName})</TopMsg>
+          <Content>{content}</Content>
 
           <Modal
             title="쪽지함 내용"
@@ -66,7 +76,7 @@ const MsgBox = ({ isSend }) => {
             footer={null}
             onClick={() => modalToggle()}
           >
-            <p>qmkfnediosfnldkndls</p>
+            <p>{content}</p>
           </Modal>
         </Wrapper>
       </Fade>
