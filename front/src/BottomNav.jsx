@@ -6,7 +6,7 @@ import {
   UserOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Routes, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Wrapper = styled.nav`
   width: 100%;
